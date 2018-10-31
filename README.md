@@ -1,27 +1,16 @@
-*********************************************************************************************
 
-  C	                          *** This is CRUP ***                                    C
-  *	          (C)ondition-specific (R)egulatory (U)nits (P)rediction                  *	
-  R	                                                                                  R	
-  *	                                                                                  *	
-  U	                      (version 1.0 - 11/10/2018)                                  U	
-  *	                                                                                  *	
-  P	                                contact:                                          P	
-  *	              ramisch@molgen.mpg.de, heinrich@molgen.mpg.de                       *	
+# Contact
 
-*********************************************************************************************
+heinrich@molgen.mpg.de
 
 
-#############################################################################################
-# ***                               Short Description                                   *** #
-#############################################################################################
+# Short Description    
 
 CRUP ([C]ondition-specific [R]egulatory [U]nits [P]rediction) is a workflow consisting of three 
 main steps (CRUP - EP, CRUP - ED, CRUP - ED) and an additonal pre-preparing step (CRUP - normalize),
 whereas each step build upon one another.
 CRUP collapses different layers of epigenetic information into a single list of regulatory units
 consisting of dynamically changing enhancers and target genes.
-
 
 # *** CRUP - normalize
 
@@ -51,129 +40,121 @@ The method CRUP - ET (Enhancer Targets) was developed to correlate condition-spe
 to normalized RNA-seq experiments.
 
 
-General workflow:
+General workflow:\
 CRUP-normalize -> CRUP-EP -> CRUP-ED -> CRUP-ET
 
-#############################################################################################
-# ***                                     Citation                                      *** #
-#############################################################################################
+# Citation
 
-I you are using CRUP, please cite the following publication:
-
+I you are using CRUP, please cite the following publication:\
 This is still unpublished work.
 
-#############################################################################################
-# ***                                    Run CRUP                                       *** #
-#############################################################################################
+
+# Run CRUP 
 
 Run 'Rscript CRUP.R' or 'Rscript CRUP.R -h' to see all possible functions of CRUP.
 
-Usage: CRUP.R [-[-norm|N]] [-[-prediction|P]] [-[-dynamics|D]] [-[-targets|T]] [-[-help|h]]
-    -N|--norm          computes normalized count values for .bam files
-    -P|--prediction    runs CRUP - EP: (E)nhancer (P)rediction from histone modification
-    -D|--dynamics      runs CRUP - ED: assigns (E)nhancer to (D)ynamic conditions
-    -T|--targets       runs CRUP - ET: correlates (E)nhancer to (T)arget genes
+Usage: CRUP.R [-[-norm|N]] [-[-prediction|P]] [-[-dynamics|D]] [-[-targets|T]] [-[-help|h]]\
+    -N|--norm          computes normalized count values for .bam files\
+    -P|--prediction    runs CRUP - EP: (E)nhancer (P)rediction from histone modification\
+    -D|--dynamics      runs CRUP - ED: assigns (E)nhancer to (D)ynamic conditions\
+    -T|--targets       runs CRUP - ET: correlates (E)nhancer to (T)arget genes\
     -h|--help          this help message
 
     
-
-#############################################################################################
-# ***                                 R PACKAGES                                        *** #
-#############################################################################################
+# R PACKAGES
 
 All required R packages (Overview):
----------------------------------------------------------
-getopt
-bamsignals
-Rsamtools
-BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9
-BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10
-BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19
-preprocessCore
-randomForest
-GenomicRanges
-rtracklayer
-ggplot2
-dplyr
-matrixStats
-parallel
-GenomicFeatures
-GenomicAlignments
-DESeq2
+
+getopt\
+bamsignals\
+Rsamtools\
+BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9\
+BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10\
+BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19\
+preprocessCore\
+randomForest\
+GenomicRanges\
+rtracklayer\
+ggplot2\
+dplyr\
+matrixStats\
+parallel\
+GenomicFeatures\
+GenomicAlignments\
+DESeq2\
 TxDb.Mmusculus.UCSC.mm10.knownGene
 
+
 Required packages for  'Rscript CRUP.R -N' (normalization):
----------------------------------------------------------------------------------------------
-getopt
-bamsignals
-Rsamtools
-BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9
-BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10
+
+getopt\
+bamsignals\
+Rsamtools\
+BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9\
+BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10\
 BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19
 
 
 Required packages for  'Rscript CRUP.R -P' (enhancer prediction):
----------------------------------------------------------------------------------------------
-getopt
-preprocessCore
-randomForest
-GenomicRanges
+
+getopt\
+preprocessCore\
+randomForest\
+GenomicRanges\
 rtracklayer
 
 
 Required packages for  'Rscript CRUP.R -D' (enhancer dynamics):
----------------------------------------------------------------------------------------------
-ggplot2
-GenomicRanges
-dplyr
-matrixStats
+
+ggplot2\
+GenomicRanges\
+dplyr\
+matrixStats\
 parallel
 
 
 Required packages for  'Rscript CRUP.R -T' (enhancer targets):
----------------------------------------------------------------------------------------------
-ggplot2
-GenomicRanges
-GenomicFeatures
-GenomicAlignments
-Rsamtools
-DESeq2
+
+ggplot2\
+GenomicRanges\
+GenomicFeatures\
+GenomicAlignments\
+Rsamtools\
+DESeq2\
 TxDb.Mmusculus.UCSC.mm10.knownGene
 
-#############################################################################################
-# ***                               Run CRUP - norm                                     *** #
-#############################################################################################
+
+# Run CRUP - norm
 
 Run 'Rscript CRUP.R -N ' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-file|f] <character>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-mapq|m] <integer>] [-[-help|h]]
-    -x|--cores         number of cores to use (DEFAULT:1)
-    -f|--file          summary text file for ChIP-seq experiments
-    -g|--genome        genome used in the .bam files ('hg19', 'mm10' or 'mm9')
-    -s|--sequencing    type of sequencing ('paired' or 'single')
-    -o|--outdir        output directory (DEFAULT: same as 'file' directory)
-    -q|--mapq          minimum mapping quality (DEFAULT:10)
+Usage: CRUP.R [-[-cores|x] <integer>] [-[-file|f] <character>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-mapq|m] <integer>] [-[-help|h]]\
+    -x|--cores         number of cores to use (DEFAULT:1)\
+    -f|--file          summary text file for ChIP-seq experiments\
+    -g|--genome        genome used in the .bam files ('hg19', 'mm10' or 'mm9')\
+    -s|--sequencing    type of sequencing ('paired' or 'single')\
+    -o|--outdir        output directory (DEFAULT: same as 'file' directory)\
+    -q|--mapq          minimum mapping quality (DEFAULT:10)\
     -h|--help          this help message
 
 
 Preparation:
----------------------------------------------------------------------------------------------
 
 The only preparation that has to be done is to create a tab delimited info file that lists
 the location of all ChIP-seq experiments in bam file format.
 All bam files have to be indexed.
-The following histone modifications must be present:
+The following histone modifications must be present:\
 'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'
 
 The required column names are: 'feature', 'bam_file', 'bam_file_input'
 
-feature         -> lists histone modifications: 'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'
-bam_file        -> location of the alignments in bam format, e.g.: 'TEST/DATA/ChIPseq/condition1.H3K27ac.bam'
+feature         -> lists histone modifications: 'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'\
+bam_file        -> location of the alignments in bam format, e.g.: 'TEST/DATA/ChIPseq/condition1.H3K27ac.bam'\
 bam_file_input  -> location of the Input experiments that are associated with each bam_file entry. 
 
 Example info files:
 
-TEST/condition1.info.txt
+TEST/condition1.info.txt\
 TEST/condition2.info.txt
 
 
@@ -185,25 +166,22 @@ The ChIP-seq experiments are listed in the required info file 'condition1.info.t
 Run 'Rscript CRUP.R -N -f TEST/condition1.info.txt -g mm10 -s paired -o TEST/RESULTS/0_NORMALIZED_DATA/'
 
 Output:
----------------------------------------------------------------------------------------------
 
-> Input normalized and summarized counts in rds file format:
+> Input normalized and summarized counts in rds file format:\
 'TEST/RESULTS/0_NORMALIZED_DATA/condition1.data_matrix.rds'
 
 
-#############################################################################################
-# ***                                Run CRUP - EP                                      *** #
-#############################################################################################
+# Run CRUP - EP       
 
 Run 'Rscript CRUP.R -P' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-matrix|m] <character>] [-[-classifier|c] <character>] [-[-cutoff|u] <double>] [-[-distance|d] <integer>] [-[-outdir|o] <character>] [-[-help|h]]
-    -x|--cores         number of cores to use (DEFAULT:1)
-    -m|--matrix        normalized data matrix (rds file format)
-    -c|--classifier    directory of enhancer classifier
-    -u|--cutoff        cutoff for probabilities [0,1] (DEFAULT: 0.5)
-    -d|--distance      maximum distance (bp) for peak clustering (DEFAULT: 12500)
-    -o|--outdir        output directory (DEFAULT: same as 'file' directory)
+Usage: CRUP.R [-[-cores|x] <integer>] [-[-matrix|m] <character>] [-[-classifier|c] <character>] [-[-cutoff|u] <double>] [-[-distance|d] <integer>] [-[-outdir|o] <character>] [-[-help|h]]\
+    -x|--cores         number of cores to use (DEFAULT:1)\
+    -m|--matrix        normalized data matrix (rds file format)\
+    -c|--classifier    directory of enhancer classifier\
+    -u|--cutoff        cutoff for probabilities [0,1] (DEFAULT: 0.5)\
+    -d|--distance      maximum distance (bp) for peak clustering (DEFAULT: 12500)\
+    -o|--outdir        output directory (DEFAULT: same as 'file' directory)\
     -h|--help          this help message
 
 
@@ -211,117 +189,108 @@ Usage: CRUP.R [-[-cores|x] <integer>] [-[-matrix|m] <character>] [-[-classifier|
 
 Run 'Rscript CRUP.R -P -m TEST/RESULTS/0_NORMALIZED_DATA/condition1.data_matrix.rds -o TEST/RESULTS/1_RF_PREDICTIONS/'
 
-
 Output:
----------------------------------------------------------------------------------------------
 
-> enhancer probabilities for each 100 bp bin in the genome (bigwig and rds fileformat):
-'TEST/RESULTS/1_RF_PREDICTIONS/condition1.bw'
+> enhancer probabilities for each 100 bp bin in the genome (bigwig and rds fileformat):\
+'TEST/RESULTS/1_RF_PREDICTIONS/condition1.bw'\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.rds'
 
-> enhancer peak calls (bedgraph format):
+> enhancer peak calls (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.singleEnh.bedGraph'
 
-> cluster of peak (bedgraph format):
+> cluster of peak (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.clusterEnh.bed'
 
 
-#############################################################################################
-# ***                                Run CRUP - ED                                      *** #
-#############################################################################################
+# Run CRUP - ED 
 
 Run 'Rscript CRUP.R -D' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-outdir|o] <character>] [-[-probabilities|p] <character>] [-[-names|n] <character>] [-[-w_0|w] <double>] [-[-threshold|t] <double>] [-[-len|l] <integer>] [-[-help|h]]
-    -x|--cores            number of cores to use (DEFAULT:1)
-    -o|--outdir           output directory (DEFAULT: same as 'file' directory)
-    -p|--probabilities    probabilities in rds format. list: delimiter samples: ':', delimiter conditions: ','
-    -n|--names            aternative labels for 'p' in same format (DEFAULT: cond1_1:cond1_2[...],cond2_1[...])
-    -w|--w_0              minimum difference between group means [0,1]. (DEFAULT: 0.5)
-    -t|--threshold        threshold for p-values in [0,1]. (DEFAULT: 0.01)
-    -l|--len              length of flanking region for summarizing. (DEFAULT: 1000)
+Usage: CRUP.R [-[-cores|x] <integer>] [-[-outdir|o] <character>] [-[-probabilities|p] <character>] [-[-names|n] <character>] [-[-w_0|w] <double>] [-[-threshold|t] <double>] [-[-len|l] <integer>] [-[-help|h]]\
+    -x|--cores            number of cores to use (DEFAULT:1)\
+    -o|--outdir           output directory (DEFAULT: same as 'file' directory)\
+    -p|--probabilities    probabilities in rds format. list: delimiter samples: ':', delimiter conditions: ','\
+    -n|--names            aternative labels for 'p' in same format (DEFAULT: cond1_1:cond1_2[...],cond2_1[...])\
+    -w|--w_0              minimum difference between group means [0,1]. (DEFAULT: 0.5)\
+    -t|--threshold        threshold for p-values in [0,1]. (DEFAULT: 0.01)\
+    -l|--len              length of flanking region for summarizing. (DEFAULT: 1000)\
     -h|--help             this help message
 
 
 # *** Example run:
 
-First: 
+First: \
 predict enhancers in another condition.
 
 Run 'Rscript CRUP.R -N -f TEST/condition2.info.txt -g mm10 -s paired -o TEST/RESULTS/0_NORMALIZED_DATA/'
 
 Run 'Rscript CRUP.R -P -m TEST/RESULTS/0_NORMALIZED_DATA/condition2.data_matrix.rds -o TEST/RESULTS/1_RF_PREDICTIONS/'
 
-Then:
+Then:\
 identify condition-specific enhancer regions.
 
 Run 'Rscript CRUP.R -D -p TEST/RESULTS/1_RF_PREDICTIONS/condition1.rds,TEST/RESULTS/1_RF_PREDICTIONS/condition2.rds -o TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/ -w 0.1'
 
 Output:
----------------------------------------------------------------------------------------------
 
-> summarized condition-specific enhancer regions:
+> summarized condition-specific enhancer regions:\
 'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt'
 
-  - 'best.p.value'          -> lowest empirical pvalue in condition-specfic enhancer region
-  - 'cluster'               -> cluster obtained from significance pattern
-  - 'significance.pattern'  -> significance pattern
-      -> e.g. '01' means that condition 1 and condition 2 are significantly different and the enhancer probability  of condition 2 > condition 1
+  - 'best.p.value'          -> lowest empirical pvalue in condition-specfic enhancer region\
+  - 'cluster'               -> cluster obtained from significance pattern\
+  - 'significance.pattern'  -> significance pattern\
+      -> e.g. '01' means that condition 1 and condition 2 are significantly different and the enhancer probability  of condition 2 > condition 1\
   - best probability values for each region per sample
 
-> summarized condition-specific enhancer regions in bed file format:
+> summarized condition-specific enhancer regions in bed file format:\
 'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.bed'
 
-> summarized condition-specific enhancer regions, visualized as a heatmap (colored bt lowest p-value in region):
+> summarized condition-specific enhancer regions, visualized as a heatmap (colored bt lowest p-value in region):\
 'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.pdf'
 
 
-
-#############################################################################################
-# ***                                Run CRUP - ET                                      *** #
-#############################################################################################
+# Run CRUP - ET
 
 Run 'Rscript CRUP.R -T' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-names|n] <character>] [-[-threshold_c|C] <double>] [-[-regions|r] <character>] [-[-RNA|E] <character>] [-[-expression|e] <character>] [-[-TAD|b] <character>] [-[-mapq|q] <integer>] [-[-help|h]]
-    -x|--cores          number of cores to use (DEFAULT:1)
-    -g|--genome         genome used in the .bam files ('hg19', 'mm10' or 'mm9')
-    -s|--sequencing     type of sequencing ('paired' or 'single')
-    -o|--outdir         output directory (DEFAULT: same as 'file' directory)
-    -n|--names          aternative labels for conditions (DEFAULT: cond1,cond2, ..)
-    -C|--threshold_c    threshold for correlation in [0.5,1]. (DEFAULT: 0.9)
+Usage: CRUP.R [-[-cores|x] <integer>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-names|n] <character>] [-[-threshold_c|C] <double>] [-[-regions|r] <character>] [-[-RNA|E] <character>] [-[-expression|e] <character>] [-[-TAD|b] <character>] [-[-mapq|q] <integer>] [-[-help|h]]\
+    -x|--cores          number of cores to use (DEFAULT:1)\
+    -g|--genome         genome used in the .bam files ('hg19', 'mm10' or 'mm9')\
+    -s|--sequencing     type of sequencing ('paired' or 'single')\
+    -o|--outdir         output directory (DEFAULT: same as 'file' directory)\
+    -n|--names          aternative labels for conditions (DEFAULT: cond1,cond2, ..)\
+    -C|--threshold_c    threshold for correlation in [0.5,1]. (DEFAULT: 0.9)\
     -r|--regions        text file with condition-specific regions in txt format
-    -E|--RNA            RNA-seq experiments in bam format. list: delimiter samples: ':', delimiter conditions: ','
-    -e|--expression     gene expression counts for all samples and conditions
-    -b|--TAD            .bed file with TADs (DEFAULT: DATA/mESC_mapq30_KR_all_TADs.bed)
+    -E|--RNA            RNA-seq experiments in bam format. list: delimiter samples: ':', delimiter conditions: ','\
+    -e|--expression     gene expression counts for all samples and conditions\
+    -b|--TAD            .bed file with TADs (DEFAULT: DATA/mESC_mapq30_KR_all_TADs.bed)\
     -h|--help           this help message
 
 
-# *** A) Example run with RNA-seq experiments in bam file format:
+# *** A) Example run with RNA-seq experiments in bam file format:\
 
 Run 'Rscript CRUP.R -T -r TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt -g mm10 -s paired -E TEST/DATA/RNAseq/Condition1.bam,TEST/DATA/RNAseq/Condition2.bam -o TEST/RESULTS/3_REGULATORY_REGIONS/'
 
 Output:
----------------------------------------------------------------------------------------------
 
-> normalized gene expression counts:
-'gene_expression.rds'
+> normalized gene expression counts:\
+'gene_expression.rds'\
 
-> dynamic regulatory units in txt format:
-'RegulatoryUnits.txt'
+> dynamic regulatory units in txt format:\
+'RegulatoryUnits.txt'\
 
-  - 'seqnames'            -> chr of dynamic enhancer region
-  - 'start'               -> start of dynamic enhancer region
-  - 'end'                 -> end of dynamic enhancer region
-  - 'width'               -> width of dynamic enhancer region
-  - 'strand'              -> strand of dynamic enhancer region
-  - 'cluster'             -> associated cluster of dynamic enhancer region
-  - 'TAD_COORDINATES'     -> coordinates of topologically associated domain around dynamic enhancer region
-  - 'CORRELATED_GENE'     -> ID of the gene that is correlated with dynamic enhancer region
-  - 'CORRELATION'         -> correlation value
+  - 'seqnames'            -> chr of dynamic enhancer region\
+  - 'start'               -> start of dynamic enhancer region\
+  - 'end'                 -> end of dynamic enhancer region\
+  - 'width'               -> width of dynamic enhancer region\
+  - 'strand'              -> strand of dynamic enhancer region\
+  - 'cluster'             -> associated cluster of dynamic enhancer region\
+  - 'TAD_COORDINATES'     -> coordinates of topologically associated domain around dynamic enhancer region\
+  - 'CORRELATED_GENE'     -> ID of the gene that is correlated with dynamic enhancer region\
+  - 'CORRELATION'         -> correlation value\
   - best probability values for each region per sample
 
-> dynamic regulatory units in (ucsc) interaction format:
+> dynamic regulatory units in (ucsc) interaction format:\
 'RegulatoryUnits.interaction'
 
 
@@ -331,7 +300,6 @@ Run 'Rscript CRUP.R -T -r TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0
 
 
 Output:
----------------------------------------------------------------------------------------------
 
 Same output as in B), just without 'gene_expression.rds'.
 
