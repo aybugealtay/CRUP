@@ -198,7 +198,7 @@ Output:
 > enhancer peak calls (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.singleEnh.bedGraph'
 
-> cluster of peak (bedgraph format):\
+> cluster of peaks (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.clusterEnh.bed'
 
 
