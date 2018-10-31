@@ -234,8 +234,7 @@ Run 'Rscript CRUP.R -D -p TEST/RESULTS/1_RF_PREDICTIONS/condition1.rds,TEST/RESU
 Output:
 
 > summarized condition-specific enhancer regions:\
-'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt'
-
+'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt'\
   - 'best.p.value'          -> lowest empirical pvalue in condition-specfic enhancer region\
   - 'cluster'               -> cluster obtained from significance pattern\
   - 'significance.pattern'  -> significance pattern\
@@ -278,7 +277,6 @@ Output:
 
 > dynamic regulatory units in txt format:\
 'RegulatoryUnits.txt'\
-
   - 'seqnames'            -> chr of dynamic enhancer region\
   - 'start'               -> start of dynamic enhancer region\
   - 'end'                 -> end of dynamic enhancer region\
