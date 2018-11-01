@@ -30,8 +30,8 @@ parameter <- c("file", "sequencing", "genome")
 parameter.bool <- sapply(parameter, function(x) !is.null(opt[[x]]))
 parameter.extra <- c("outdir", "cores", "mapq")
 
-if (!is.null(opt$help)) stop_script(c(parameter, parameter.extra))
-if (sum(parameter.bool) == 0) stop_script(c(parameter, parameter.extra))
+if (!is.null(opt$help)) stop_script(c("norm", parameter, parameter.extra))
+if (sum(parameter.bool) == 0) stop_script(c("norm", parameter, parameter.extra))
 
 # check sequencing parameter
 if (!(opt$sequencing %in% sequencing_values)) {

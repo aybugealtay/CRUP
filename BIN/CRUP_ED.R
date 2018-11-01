@@ -49,8 +49,8 @@ parameter <- c("probabilities")
 parameter.bool <- sapply(parameter, function(x) !is.null(opt[[x]]))
 parameter.extra <- c("outdir", "cores", "w_0", "len", "threshold", "names")
 
-if (!is.null(opt$help)) stop_script(c(parameter, parameter.extra))
-if (sum(parameter.bool) == 0) stop_script(c(parameter, parameter.extra))
+if (!is.null(opt$help)) stop_script(c("dynamics", parameter, parameter.extra))
+if (sum(parameter.bool) == 0) stop_script(c("dynamics", parameter, parameter.extra))
 
 # check probability files
 files <- as.list(unlist(strsplit(opt$probabilities,',')))

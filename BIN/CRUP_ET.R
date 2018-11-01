@@ -36,10 +36,10 @@ parameter <- c("regions", "RNA", "expression", "genome", "sequencing")
 parameter.bool <- sapply(parameter, function(x) !is.null(opt[[x]]))
 parameter.extra <- c("outdir", "cores", "TAD", "names", "threshold_c")
 
-if (!is.null(opt$help)) stop_script(c(parameter, parameter.extra))
-if (is.null(opt$regions)) stop_script(c(parameter, parameter.extra))
-if (is.null(opt$RNA) & is.null(opt$expression)) stop_script(c(parameter, parameter.extra))
-if (!is.null(opt$RNA) & (is.null(opt$genome) | is.null(opt$sequencing))) stop_script(c(parameter, parameter.extra))
+if (!is.null(opt$help)) stop_script(c("targets", parameter, parameter.extra))
+if (is.null(opt$regions)) stop_script(c("targets", parameter, parameter.extra))
+if (is.null(opt$RNA) & is.null(opt$expression)) stop_script(c("targets", parameter, parameter.extra))
+if (!is.null(opt$RNA) & (is.null(opt$genome) | is.null(opt$sequencing))) stop_script(c("targets", parameter, parameter.extra))
 if (!is.null(opt$RNA) & !is.null(opt$expression)) {
   cat(skip(), "normalized expression counts are provided. Ignore RNA-seq files.\n")
   opt$RNA <- NULL

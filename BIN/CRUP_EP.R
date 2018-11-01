@@ -30,8 +30,8 @@ parameter <- c("matrix")
 parameter.bool <- sapply(parameter, function(x) !is.null(opt[[x]]))
 parameter.extra <- c("outdir", "cores", "classifier", "cutoff", "distance")
 
-if (!is.null(opt$help)) stop_script(c(parameter, parameter.extra))
-if (sum(parameter.bool) == 0) stop_script(c(parameter, parameter.extra))
+if (!is.null(opt$help)) stop_script(c("prediction", parameter, parameter.extra))
+if (sum(parameter.bool) == 0) stop_script(c("prediction", parameter, parameter.extra))
 
 # check data matrix file
 check_file(opt$matrix)

@@ -128,13 +128,14 @@ TxDb.Mmusculus.UCSC.mm10.knownGene
 
 Run 'Rscript CRUP.R -N ' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-file|f] <character>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-mapq|m] <integer>] [-[-help|h]]\
-    -x|--cores         number of cores to use (DEFAULT:1)\
-    -f|--file          summary text file for ChIP-seq experiments\
-    -g|--genome        genome used in the .bam files ('hg19', 'mm10' or 'mm9')\
-    -s|--sequencing    type of sequencing ('paired' or 'single')\
-    -o|--outdir        output directory (DEFAULT: same as 'file' directory)\
-    -q|--mapq          minimum mapping quality (DEFAULT:10)\
+Usage: CRUP.R [-[-norm|N]] [-[-cores|x] <integer>] [-[-file|f] <character>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-mapq|q] <integer>] [-[-help|h]]
+    -N|--norm          computes normalized count values for .bam files
+    -x|--cores         number of cores to use (DEFAULT:1)
+    -f|--file          summary text file for ChIP-seq experiments
+    -g|--genome        genome used in the .bam files ('hg19', 'mm10' or 'mm9')
+    -s|--sequencing    type of sequencing ('paired' or 'single')
+    -o|--outdir        output directory (DEFAULT: same as 'file' directory)
+    -q|--mapq          minimum mapping quality (DEFAULT:10)
     -h|--help          this help message
 
 
@@ -175,15 +176,16 @@ Output:
 
 Run 'Rscript CRUP.R -P' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-matrix|m] <character>] [-[-classifier|c] <character>] [-[-cutoff|u] <double>] [-[-distance|d] <integer>] [-[-outdir|o] <character>] [-[-help|h]]\
-    -x|--cores         number of cores to use (DEFAULT:1)\
-    -m|--matrix        normalized data matrix (rds file format)\
-    -c|--classifier    directory of enhancer classifier\
-    -u|--cutoff        cutoff for probabilities [0,1] (DEFAULT: 0.5)\
-    -d|--distance      maximum distance (bp) for peak clustering (DEFAULT: 12500)\
-    -o|--outdir        output directory (DEFAULT: same as 'file' directory)\
+Usage: CRUP.R [-[-prediction|P]] [-[-cores|x] <integer>] [-[-matrix|m] <character>] [-[-classifier|c] <character>] [-[-cutoff|u] <double>] [-[-distance|d] <integer>] [-[-outdir|o] <character>] [-[-help|h]]
+    -P|--prediction    runs CRUP - EP: (E)nhancer (P)rediction from histone modification
+    -x|--cores         number of cores to use (DEFAULT:1)
+    -m|--matrix        normalized data matrix (rds file format)
+    -c|--classifier    directory of enhancer classifier
+    -u|--cutoff        cutoff for probabilities [0,1] (DEFAULT: 0.5)
+    -d|--distance      maximum distance (bp) for peak clustering (DEFAULT: 12500)
+    -o|--outdir        output directory (DEFAULT: same as 'file' directory)
     -h|--help          this help message
-
+    
 
 # *** Example run:
 
@@ -198,7 +200,7 @@ Output:
 > enhancer peak calls (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.singleEnh.bedGraph'
 
-> cluster of peaks (bedgraph format):\
+> cluster of peak (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.clusterEnh.bed'
 
 
@@ -206,14 +208,15 @@ Output:
 
 Run 'Rscript CRUP.R -D' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-outdir|o] <character>] [-[-probabilities|p] <character>] [-[-names|n] <character>] [-[-w_0|w] <double>] [-[-threshold|t] <double>] [-[-len|l] <integer>] [-[-help|h]]\
-    -x|--cores            number of cores to use (DEFAULT:1)\
-    -o|--outdir           output directory (DEFAULT: same as 'file' directory)\
-    -p|--probabilities    probabilities in rds format. list: delimiter samples: ':', delimiter conditions: ','\
-    -n|--names            aternative labels for 'p' in same format (DEFAULT: cond1_1:cond1_2[...],cond2_1[...])\
-    -w|--w_0              minimum difference between group means [0,1]. (DEFAULT: 0.5)\
-    -t|--threshold        threshold for p-values in [0,1]. (DEFAULT: 0.01)\
-    -l|--len              length of flanking region for summarizing. (DEFAULT: 1000)\
+Usage: CRUP.R [-[-dynamics|D]] [-[-cores|x] <integer>] [-[-outdir|o] <character>] [-[-probabilities|p] <character>] [-[-names|n] <character>] [-[-w_0|w] <double>] [-[-threshold|t] <double>] [-[-len|l] <integer>] [-[-help|h]]
+    -D|--dynamics         runs CRUP - ED: assigns (E)nhancer to (D)ynamic conditions
+    -x|--cores            number of cores to use (DEFAULT:1)
+    -o|--outdir           output directory (DEFAULT: same as 'file' directory)
+    -p|--probabilities    probabilities in rds format. list: delimiter samples: ':', delimiter conditions: ','
+    -n|--names            aternative labels for conditions (DEFAULT: cond1,cond2, ..)
+    -w|--w_0              minimum difference between group means [0,1]. (DEFAULT: 0.5)
+    -t|--threshold        threshold for p-values in [0,1]. (DEFAULT: 0.01)
+    -l|--len              length of flanking region for summarizing. (DEFAULT: 1000)
     -h|--help             this help message
 
 
@@ -234,7 +237,8 @@ Run 'Rscript CRUP.R -D -p TEST/RESULTS/1_RF_PREDICTIONS/condition1.rds,TEST/RESU
 Output:
 
 > summarized condition-specific enhancer regions:\
-'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt'\
+'TEST/RESULTS/2_DIFFERENTIAL_ENHANCERS/dynamicEnh__w0_0.1__threshold_0.01.txt'
+
   - 'best.p.value'          -> lowest empirical pvalue in condition-specfic enhancer region\
   - 'cluster'               -> cluster obtained from significance pattern\
   - 'significance.pattern'  -> significance pattern\
@@ -252,17 +256,18 @@ Output:
 
 Run 'Rscript CRUP.R -T' to see all possible input parameters:
 
-Usage: CRUP.R [-[-cores|x] <integer>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-names|n] <character>] [-[-threshold_c|C] <double>] [-[-regions|r] <character>] [-[-RNA|E] <character>] [-[-expression|e] <character>] [-[-TAD|b] <character>] [-[-mapq|q] <integer>] [-[-help|h]]\
-    -x|--cores          number of cores to use (DEFAULT:1)\
-    -g|--genome         genome used in the .bam files ('hg19', 'mm10' or 'mm9')\
-    -s|--sequencing     type of sequencing ('paired' or 'single')\
-    -o|--outdir         output directory (DEFAULT: same as 'file' directory)\
-    -n|--names          aternative labels for conditions (DEFAULT: cond1,cond2, ..)\
-    -C|--threshold_c    threshold for correlation in [0.5,1]. (DEFAULT: 0.9)\
+CRUP.R [-[-targets|T]] [-[-cores|x] <integer>] [-[-genome|g] <character>] [-[-sequencing|s] <character>] [-[-outdir|o] <character>] [-[-names|n] <character>] [-[-threshold_c|C] <double>] [-[-regions|r] <character>] [-[-RNA|E] <character>] [-[-expression|e] <character>] [-[-TAD|b] <character>] [-[-help|h]]
+    -T|--targets        runs CRUP - ET: correlates (E)nhancer to (T)arget genes
+    -x|--cores          number of cores to use (DEFAULT:1)
+    -g|--genome         genome used in the .bam files ('hg19', 'mm10' or 'mm9')
+    -s|--sequencing     type of sequencing ('paired' or 'single')
+    -o|--outdir         output directory (DEFAULT: same as 'file' directory)
+    -n|--names          aternative labels for conditions (DEFAULT: cond1,cond2, ..)
+    -C|--threshold_c    threshold for correlation in [0.5,1]. (DEFAULT: 0.9)
     -r|--regions        text file with condition-specific regions in txt format
-    -E|--RNA            RNA-seq experiments in bam format. list: delimiter samples: ':', delimiter conditions: ','\
-    -e|--expression     gene expression counts for all samples and conditions\
-    -b|--TAD            .bed file with TADs (DEFAULT: DATA/mESC_mapq30_KR_all_TADs.bed)\
+    -E|--RNA            RNA-seq experiments in bam format. list: delimiter samples: ':', delimiter conditions: ','
+    -e|--expression     gene expression counts for all samples and conditions
+    -b|--TAD            .bed file with TADs (DEFAULT: DATA/mESC_mapq30_KR_all_TADs.bed)
     -h|--help           this help message
 
 
@@ -277,6 +282,7 @@ Output:
 
 > dynamic regulatory units in txt format:\
 'RegulatoryUnits.txt'\
+
   - 'seqnames'            -> chr of dynamic enhancer region\
   - 'start'               -> start of dynamic enhancer region\
   - 'end'                 -> end of dynamic enhancer region\
