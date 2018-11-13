@@ -122,7 +122,7 @@ if (!identical(colnames(info), header.valid)) {
 # get and check feature set
 features.valid <-  c("H3K27ac", "H3K27me3", "H3K36me3", "H3K4me1", "H3K4me3", "H3K9me3")
 if (!identical(as.character(info$feature), features.valid)) {
-  cat(paste0("Features in the summary text file are not correct.\n
+  cat(paste0("Features in the summary text file are not correct.\nll
               Necessary features: ", features.valid,"\n")
       ); 
   q();
@@ -131,8 +131,8 @@ if (!identical(as.character(info$feature), features.valid)) {
 }
 
 # check if all paths in file exist
-bam_files_HM <- paste0(path, as.character(info$bam_file))
-bam_files_input <- paste0(path, as.character(info$bam_file_input))
+bam_files_HM <- as.character(info$bam_file)
+bam_files_input <- as.character(info$bam_file_input)
 
 for (this in unique(c(bam_files_HM, bam_files_input))) {
   check_file(this)
