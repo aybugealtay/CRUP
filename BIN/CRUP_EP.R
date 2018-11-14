@@ -155,7 +155,7 @@ rm(data_matrix_ext)
 
 # normalized matrix
 data_matrix_norm_ext <- extend_dataMatrix(N = 5, df = data.frame(data_matrix_norm), f = features_all)
-
+data_matrix_norm_ext <- data_matrix_norm_ext[-zero.idx,]
 done()
 
 endPart()
@@ -166,8 +166,12 @@ endPart()
 
 startPart("Get enhancer probabilities for each bin")
 
-prediction1 <- predict(classifier1, data_matrix_norm_ext[-zero.idx,], type = "prob")[,2]
-prediction2 <- predict(classifier2, data_matrix_norm_ext[-zero.idx,], type = "prob")[,2]
+prediction1 <- predict(classifier1, data_matrix_norm_ext[1:20000000,], type = "prob")[,2]
+prediction1 <- c(prediction1, predict(classifier1, data_matrix_norm_ext[20000001:nrow(data_matrix_norm_ext),], type = "prob")[,2])
+
+prediction2 <- predict(classifier2, data_matrix_norm_ext[1:20000000,], type = "prob")[,2]
+prediction2 <- c(prediction2, predict(classifier2, data_matrix_norm_ext[20000001:nrow(data_matrix_norm_ext),], type = "prob")[,2])
+
 rm(data_matrix_norm_ext)
 
 elementMetadata(data_matrix) <- NULL
