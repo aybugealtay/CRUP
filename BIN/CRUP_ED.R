@@ -70,7 +70,7 @@ if (is.null(opt$names)) {
   } else{
     IDs <- files
     for (i in 1:length(IDs)) {
-      for (j in 1:length(IDs[[1]])) {
+      for (j in 1:length(IDs[[i]])) {
         IDs[[i]][j] <- paste0(labels[i], "_", j)
       }
     }

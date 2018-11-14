@@ -338,7 +338,11 @@ get_probabiltyMatrix <- function(files, IDs){
       colnames(elementMetadata(this)) <- IDs[[i]][j]
       
       # combine:
-      probs <- merge(probs, this, all = TRUE)
+      if(length(probs) > 0 ){
+      	probs <- merge(probs, this, all = TRUE)
+      }else{
+	probs <- this
+	}
     }
   }
   return(probs)
