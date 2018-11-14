@@ -364,12 +364,12 @@ get_invalidIdx <- function(gr, w_0){
 ##################################################################
 
 get_uniqueKey <- function(m, IDs){
-  
+
   # length of (max) digits (after '.')
   len_digits <- max(nchar(formatC(as.matrix(mcols(m)[1])))) + 1
   
   # round
-  m <- as.matrix(round(mcols(m)[,IDs]*10^(len_digits - 1),0))
+  m <- as.matrix(round(as.matrix(mcols(m)[,IDs])*10^(len_digits - 1),0))
   
   step <- 1/(10^(len_digits))
   digits <- dim(m)[2]*(len_digits)
@@ -496,9 +496,9 @@ compute_empPvalue <- function(l, dim, x){
 # function: get test statistic distribution
 ##################################################################
 
-get_distribution <- function(values, keys, IDs.1, IDs.2){
+get_distribution <- function(values, keys, IDs.1, IDs.2, key.1, key.2){
   
-  keys.comb <- paste0(keys[[IDs.1]],keys[[IDs.2]])
+  keys.comb <- paste0(keys[[key.1]],keys[[key.2]])
   distr <- get_tStatistic( mcols(values[duplicated(keys.comb) == F])[, IDs.1], 
                            mcols(values[duplicated(keys.comb) == F])[, IDs.2], 
                            w_0
@@ -521,10 +521,10 @@ get_empPvalues <- function(i, comb, IDs, dim, probs.valid, invalid.idx, probs.sh
   IDs.2 = IDs[[comb[,i][2]]]
   
   #calculate t test statistic for shuffled columns
-  null.distr <- get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2 )
+  null.distr <- get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2, comb[,i][1], comb[,i][2] )
   
   #calculate t test statistic for original values
-  distr <- get_distribution(probs.valid, keys, IDs.1, IDs.2 )
+  distr <- get_distribution(probs.valid, keys, IDs.1, IDs.2, comb[,i][1], comb[,i][2] )
   
   #calculate empirical p values for unique values:
   p.values <- lapply( unique(distr), 
@@ -559,11 +559,9 @@ get_pairwisePvalues <- function(probs, IDs, w_0, cores){
   # create unique keys for all samples in one condition
   keys <- mclapply( as.list(seq(length(IDs))), mc.cores = cores,
                     function(i) get_uniqueKey(probs.valid, IDs[[i]]))
-  names(keys) <- unlist(IDs)
   
   keys.shuffle <- mclapply( as.list(seq(length(IDs))), mc.cores = cores,
                             function(i) get_uniqueKey(probs.shuffle.valid, IDs[[i]]))
-  names(keys.shuffle) <- unlist(IDs)
   
   # permutation test for all pairwise conditions
   comb <- combn(seq(length(IDs)),2)
@@ -575,7 +573,8 @@ get_pairwisePvalues <- function(probs, IDs, w_0, cores){
                                                    probs.valid,
                                                    invalid.idx,
                                                    probs.shuffle.valid,
-                                                   keys, keys.shuffle)
+                                                   keys,
+						   keys.shuffle)
                         )
   return(p.values)
 }
