@@ -184,10 +184,10 @@ write.table(data.frame(peaks)[, GR_header_short], file = out.bed, quote = F, row
 done()
 
 # prepare matrix for heatmap:
-LABEL_COND <- gsub("_.*","", IDs)
-LABEL_REP <- gsub(".*_", "", IDs)
+LABEL_COND <- gsub("_.*","", unlist(IDs))
+LABEL_REP <- gsub(".*_", "", unlist(IDs))
 CLUSTER <- as.numeric(mcols(peaks)$cluster)
-VALUES  <- mcols(probs[mcols(peaks)$index])
+VALUES  <- elementMetadata(peaks)[, unlist(IDs)]#mcols(probs[mcols(peaks)$index])
 
 mat <- data.frame(  X = unlist(lapply(LABEL_REP, function(x) rep(x, length(peaks)))),
                     Y = rep(adjust(width(peaks)), length(unlist(files))), 
@@ -201,7 +201,7 @@ mat <- data.frame(  X = unlist(lapply(LABEL_REP, function(x) rep(x, length(peaks
 out.pdf <- paste0(outdir, paste0("dynamicEnh__w0_",w_0,"__threshold_", threshold,".pdf"))
 cat(paste0(skip(), "results are visualized as a heatmap:  ", out.pdf))
 
-plot_heatmap(	mat[order(mat$GRID.X),],
+plot_heatmap( mat[order(mat$GRID.X),],
               IDs,
               color_low,
               color_mid,

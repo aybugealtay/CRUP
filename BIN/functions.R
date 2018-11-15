@@ -497,9 +497,7 @@ get_distribution <- function(values, keys, IDs.1, IDs.2, key.1, key.2, w_0){
 # function: compute empirical p values
 ##################################################################
 
-compute_empPvalue <- function(l, dim, x){
-  
-  tab <- table(abs(unlist(l)))
+compute_empPvalue <- function(tab, dim, x){
   res <- 1
   if (!is.na(x)) {
     idx <- which(as.numeric(names(tab)) >= abs(x))
@@ -521,18 +519,23 @@ get_empPvalues <- function(i, w_0, comb, IDs, dim, probs.valid, invalid.idx, pro
   IDs.2 = IDs[[comb[,i][2]]]
   
   #calculate t test statistic for shuffled columns
-  null.distr <- get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 )
+  null.distr <- unlist(get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 ))
   
   #calculate t test statistic for original values
-  distr <- get_distribution(probs.valid, keys, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 )
+  distr <- unlist(get_distribution(probs.valid, keys, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 ))
   
   #calculate empirical p values for unique values:
-  p.values <- unlist(lapply( unique(distr), 
-                      function(x) compute_empPvalue(null.distr, dim, x)))
+  #( the smallest significance level to achieve is 1/(n+1))
 
-  df=t(data.frame(p.values))
-  colnames(df) = formatC(as.character(unique(unlist(distr))))
-  tmp=df[,formatC(as.character(unlist(distr)))]
+  #p.values <- unlist(lapply( unique(distr), 
+  #                   function(x) compute_empPvalue(null.distr, dim, x)))
+
+  tab=table(abs(null.distr))
+  p.values <- unlist(lapply(as.list(unique(distr)), function(x) compute_empPvalue(tab, dim, x)))
+
+  df <- t(data.frame(p.values))
+  colnames(df)  <-  formatC(as.character(unique(distr)))
+  tmp  <- df[,formatC(as.character(distr))]
 
   res <- rep(1, dim)
   res[-invalid.idx] <- tmp
