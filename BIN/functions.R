@@ -476,6 +476,24 @@ get_tStatistic <- function(a, b, w_0){
 
 
 ##################################################################
+# function: get test statistic distribution
+##################################################################
+
+get_distribution <- function(values, keys, IDs.1, IDs.2, key.1, key.2, w_0){
+  
+  keys.comb <- paste0(keys[[key.1]],keys[[key.2]])
+  distr <- get_tStatistic( mcols(values[duplicated(keys.comb) == F])[, IDs.1], 
+                           mcols(values[duplicated(keys.comb) == F])[, IDs.2], 
+                           w_0
+  )
+  names(distr) <- keys.comb[duplicated(keys.comb) == F]
+  distr <- distr[keys.comb]
+  
+  return(distr)
+}
+
+
+##################################################################
 # function: compute empirical p values
 ##################################################################
 
@@ -493,47 +511,37 @@ compute_empPvalue <- function(l, dim, x){
 
 
 ##################################################################
-# function: get test statistic distribution
-##################################################################
-
-get_distribution <- function(values, keys, IDs.1, IDs.2, key.1, key.2){
-  
-  keys.comb <- paste0(keys[[key.1]],keys[[key.2]])
-  distr <- get_tStatistic( mcols(values[duplicated(keys.comb) == F])[, IDs.1], 
-                           mcols(values[duplicated(keys.comb) == F])[, IDs.2], 
-                           w_0
-  )
-  names(distr) <- keys.comb[duplicated(keys.comb) == F]
-  distr <- distr[keys.comb]
-  
-  return(distr)
-}
-
-
-##################################################################
 # function: get empirical p values
 ##################################################################
 
-get_empPvalues <- function(i, comb, IDs, dim, probs.valid, invalid.idx, probs.shuffle.valid, keys, keys.shuffle){
+get_empPvalues <- function(i, w_0, comb, IDs, dim, probs.valid, invalid.idx, probs.shuffle.valid, keys, keys.shuffle){
   
   # get IDs of i th condition
   IDs.1 = IDs[[comb[,i][1]]]
   IDs.2 = IDs[[comb[,i][2]]]
   
   #calculate t test statistic for shuffled columns
-  null.distr <- get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2, comb[,i][1], comb[,i][2] )
+  null.distr <- get_distribution(probs.shuffle.valid, keys.shuffle, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 )
   
   #calculate t test statistic for original values
-  distr <- get_distribution(probs.valid, keys, IDs.1, IDs.2, comb[,i][1], comb[,i][2] )
+  distr <- get_distribution(probs.valid, keys, IDs.1, IDs.2, comb[,i][1], comb[,i][2], w_0 )
   
   #calculate empirical p values for unique values:
-  p.values <- lapply( unique(distr), 
-                      function(x) compute_empPvalue(null.distr, dim, x))
-  names(p.values) <- formatC(as.numeric(unique(distr)), format = "f")
-  p.values <- p.values[formatC(as.numeric(distr), format = "f")]
-  
+  p.values <- unlist(lapply( unique(distr), 
+                      function(x) compute_empPvalue(null.distr, dim, x)))
+
+  df=t(data.frame(p.values))
+  colnames(df) = formatC(as.character(unique(unlist(distr))))
+  tmp=df[,formatC(as.character(unlist(distr)))]
+
   res <- rep(1, dim)
-  res[-invalid.idx] <- as.numeric(p.values)
+  res[-invalid.idx] <- tmp
+
+  #names(p.values) <- formatC(as.numeric(unique(distr)), format = "f")
+  #p.values <- p.values[formatC(as.numeric(distr), format = "f")]
+  #
+  #res <- rep(1, dim)
+  #res[-invalid.idx] <- as.numeric(unlist(p.values))
   
   return(res)
 }
@@ -567,6 +575,7 @@ get_pairwisePvalues <- function(probs, IDs, w_0, cores){
   comb <- combn(seq(length(IDs)),2)
   p.values <- mclapply( as.list(seq(dim(comb)[2])), mc.cores = cores,
                         function(i) get_empPvalues(i,
+						   w_0, 
                                                    comb,
                                                    IDs,
                                                    length(probs),
