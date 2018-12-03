@@ -167,7 +167,7 @@ endPart()
 
 startPart("Get enhancer probabilities for each bin")
 
-mid=nrow(data_matrix_norm_ext)/2
+mid=round(nrow(data_matrix_norm_ext)/2,0)
 prediction1 <- predict(classifier1, data_matrix_norm_ext[1:mid,], type = "prob")[,2]
 prediction1 <- c(prediction1, predict(classifier1, data_matrix_norm_ext[(mid+1):nrow(data_matrix_norm_ext),], type = "prob")[,2])
 
