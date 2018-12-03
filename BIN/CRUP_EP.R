@@ -139,6 +139,7 @@ for (feature in features_all) {
 
 endPart()
 
+
 ##################################################################
 # Extend data matrix
 ##################################################################
@@ -166,11 +167,12 @@ endPart()
 
 startPart("Get enhancer probabilities for each bin")
 
-prediction1 <- predict(classifier1, data_matrix_norm_ext[1:20000000,], type = "prob")[,2]
-prediction1 <- c(prediction1, predict(classifier1, data_matrix_norm_ext[20000001:nrow(data_matrix_norm_ext),], type = "prob")[,2])
+mid=nrow(data_matrix_norm_ext)/2
+prediction1 <- predict(classifier1, data_matrix_norm_ext[1:mid,], type = "prob")[,2]
+prediction1 <- c(prediction1, predict(classifier1, data_matrix_norm_ext[(mid+1):nrow(data_matrix_norm_ext),], type = "prob")[,2])
 
-prediction2 <- predict(classifier2, data_matrix_norm_ext[1:20000000,], type = "prob")[,2]
-prediction2 <- c(prediction2, predict(classifier2, data_matrix_norm_ext[20000001:nrow(data_matrix_norm_ext),], type = "prob")[,2])
+prediction2 <- predict(classifier2, data_matrix_norm_ext[1:mid,], type = "prob")[,2]
+prediction2 <- c(prediction2, predict(classifier2, data_matrix_norm_ext[(mid+1):nrow(data_matrix_norm_ext),], type = "prob")[,2])
 
 rm(data_matrix_norm_ext)
 
