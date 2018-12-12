@@ -71,6 +71,7 @@ Rsamtools\
 BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9\
 BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10\
 BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19\
+BSgenome.Hsapiens.UCSC.hg38 # when using genome hg38\
 preprocessCore\
 randomForest\
 GenomicRanges\
@@ -92,8 +93,8 @@ bamsignals\
 Rsamtools\
 BSgenome.Mmusculus.UCSC.mm9 # when using genome mm9\
 BSgenome.Mmusculus.UCSC.mm10 # when using genome mm10\
-BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19
-
+BSgenome.Hsapiens.UCSC.hg19 # when using genome hg19\
+BSgenome.Hsapiens.UCSC.hg38 # when using genome hg38
 
 Required packages for  'Rscript CRUP.R -P' (enhancer prediction):
 

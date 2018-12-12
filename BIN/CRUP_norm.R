@@ -87,6 +87,7 @@ startPart("Load packages")
 if (genome == "mm10") pkg <- "BSgenome.Mmusculus.UCSC.mm10"
 if (genome == "mm9") pkg  <- "BSgenome.Mmusculus.UCSC.mm9"
 if (genome == "hg19") pkg <- "BSgenome.Hsapiens.UCSC.hg19"
+if (genome == "hg38") pkg <- "BSgenome.Hsapiens.UCSC.hg38"
 
 pkgLoad(pkg)                            # for genome object
 assign("txdb", eval(parse(text = pkg)))
@@ -121,13 +122,15 @@ if (!identical(colnames(info), header.valid)) {
 
 # get and check feature set
 features.valid <-  c("H3K27ac", "H3K27me3", "H3K36me3", "H3K4me1", "H3K4me3", "H3K9me3")
-if (!identical(as.character(info$feature), features.valid)) {
-  cat(paste0("Features in the summary text file are not correct.\nll
-              Necessary features: ", features.valid,"\n")
+#if (!identical(as.character(info$feature), features.valid)) {
+if (! all(as.character(info$feature) %in% features.valid)) {
+  cat(paste0("Features in the summary text file are not correct.\n
+              Possible features: ", features.valid,"\n")
       ); 
   q();
 } else{
   cat(paste0(skip(),"feature set is valid.\n"))
+  features.valid <- as.character(info$feature)
 }
 
 # check if all paths in file exist

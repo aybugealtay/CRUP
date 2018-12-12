@@ -31,7 +31,7 @@ spectrum <- matrix(c( 'norm',           'N', 0, "logical",       "computes norma
                       'classifier',     'c', 1, "character",     "directory of enhancer classifier",
                       'cutoff',         'u', 1, "double",        "cutoff for probabilities [0,1] (DEFAULT: 0.5)",
                       'distance',       'd', 1, "integer",       "maximum distance (bp) for peak clustering (DEFAULT: 12500)",
-                      'genome',         'g', 1, "character",     "genome used in the .bam files ('hg19', 'mm10' or 'mm9')",
+                      'genome',         'g', 1, "character",     "genome used in the .bam files ('hg19', 'mm10', 'mm9' or 'hg38')",
                       'sequencing',     's', 1, "character",     "type of sequencing ('paired' or 'single')",
                       'outdir',         'o', 1, "character",     "output directory (DEFAULT: same as 'file' directory)",
                       'probabilities',  'p', 1, "character",     "probabilities in rds format. list: delimiter samples: ':', delimiter conditions: ','",
@@ -54,7 +54,7 @@ spectrum <- matrix(c( 'norm',           'N', 0, "logical",       "computes norma
 ##################################################################
 
 sequencing_values <- c('paired', 'single')
-genome_values <- c('hg19', 'mm10', 'mm9')
+genome_values <- c('hg19', 'mm10', 'mm9', 'hg38')
 
 ##################################################################
 #definition: output messages
