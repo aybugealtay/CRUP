@@ -77,8 +77,9 @@ if (is.null(opt$names)) {
   }
 }
 
+message(files[1])
 # check output directory
-opt$outdir <- check_outdir(opt$outdir, files[1])
+opt$outdir <- check_outdir(opt$outdir, unlist(files)[1])
 
 # set default values
 if (is.null(opt$cores))       opt$cores <- 1
