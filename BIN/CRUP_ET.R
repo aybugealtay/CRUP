@@ -47,8 +47,8 @@ if (!is.null(opt$RNA) & !is.null(opt$expression)) {
 
 # check genome
 if (!is.null(opt$genome)) { 
-  if (!(opt$genome %in% c("mm10"))) { 
-    cat(skip(),"Genome" , opt$genome, " currently not provided. Choose one of: ",paste0(c("mm10")),"\n\n");
+  if (!(opt$genome %in% c("mm10", "hg19"))) { 
+    cat(skip(),"Genome" , opt$genome, " currently not provided. Choose one of: ",paste0(c("mm10","hg19")),"\n\n");
     q();
   }
 }
@@ -98,6 +98,10 @@ if (is.null(opt$threshold_c)) {
   q();
 }
 if (is.null(opt$cores))     opt$cores <- 1
+if (is.null(opt$TAD) &  opt$genome == "mm10") {
+  cat(paste0("You have to provide your own file with TAD domains (fitting to the genome choice).\n"))
+  q();
+}
 if (is.null(opt$TAD))       opt$TAD   <- normalizePath("DATA/mESC_mapq30_KR_all_TADs.bed")
 
 ##################################################################
@@ -150,6 +154,8 @@ pkgLoad("GenomicRanges")  # for GRanges()
 if (is.null(opt$expression)) {
   
   if (genome == "mm10") pkg <- "TxDb.Mmusculus.UCSC.mm10.knownGene"
+  if (genome == "hg19") pkg <- "TxDb.Hsapiens.UCSC.hg19.knownGene"
+
   pkgLoad(pkg)                  # for genome object
   assign("txdb", eval(parse(text = pkg)))
   

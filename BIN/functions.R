@@ -336,7 +336,7 @@ get_probabiltyMatrix <- function(files, IDs){
       # read rds file:
       this <- readRDS(files[[i]][j])
       colnames(elementMetadata(this)) <- IDs[[i]][j]
-      
+ 
       # combine:
       if(length(probs) > 0 ){
       	probs <- merge(probs, this, all = TRUE)
@@ -797,24 +797,24 @@ plot_heatmap <- function(mat, IDs, color_low, color_mid, color_high, x_axis_labe
                               scales = "free",
                               space = "free"
                   ) +
-                  theme(	axis.ticks = element_blank(),
+                  theme( axis.ticks = element_blank(),
                          panel.grid.major = element_blank(), 
                          panel.grid.minor = element_blank(),
                          panel.background = element_blank(),
                          legend.position = "bottom"
                   ) +
-                  scale_fill_gradient2(	low = color_low,
+                  scale_fill_gradient2( low = color_low,
                                         mid = color_mid,
                                         high = color_high,
                                         midpoint = 0.5, 
                                         name = legend_label
                   ) +
-                  scale_y_continuous(	breaks = c(),
+                  scale_y_continuous( breaks = c(),
                                       expand = c(0, 0),
                                       name = y_axis_label
                   ) +
                   scale_x_discrete(	position = "top",
-                                    name = x_axis_label
+                                    	name = x_axis_label
                   )
     ggsave(filename = out.file, plot = plot, width = width, height = height, device = "pdf", units = 'in')
 }
@@ -889,12 +889,20 @@ check_TAD <- function(t, TAD, this.region, regions){
     precedeT <- precede(TAD, this.region)
     followT  <- follow(TAD, this.region)
     
-    start <- end(TAD[rev(which(!is.na(precedeT)))[1]])
-    if (length(start) == 0) start <- 1
-    
-    end <- start(TAD[(which(!is.na(followT)))[1]])
-    if (length(end) == 0) end <- max(end(region[which(seqnames(regions) == seqnames(this.region))]))
-    
+    if(length(which(!is.na(precedeT))) == 0 ){
+	start <- 1
+    }else{
+    	start <- end(TAD[rev(which(!is.na(precedeT)))[1]])
+    	if (length(start) == 0) start <- 1
+    }
+
+    if(length(which(!is.na(followT))) == 0 ){
+	end <- max(end(region[which(seqnames(regions) == seqnames(this.region))]))
+    }else{
+    	end <- start(TAD[(which(!is.na(followT)))[1]])
+    	if (length(end) == 0) end <- max(end(region[which(seqnames(regions) == seqnames(this.region))]))
+    }
+
     t <- GRanges(seqnames(this.region), IRanges(start, width = (end - start + 1)))
   }
   return(t)
@@ -904,8 +912,8 @@ check_TAD <- function(t, TAD, this.region, regions){
 # function: correlate probabilities and gene exression counts 
 ##################################################################
 
-get_correlation <- function(i, threshold, regions.gr, TAD.gr, IDs){
-  
+get_correlation <- function(i, threshold, regions.gr, expr.gr, TAD.gr, IDs){
+
   interactions <- data.frame(stringsAsFactors = F)
   
   # get region, associated TAD and genes within TAD
@@ -925,12 +933,13 @@ get_correlation <- function(i, threshold, regions.gr, TAD.gr, IDs){
         interactions <- rbind(	interactions, 
                                data.frame(	data.frame(this.region)[,c(GR_header_short, "cluster", IDs)],
                                            TAD_COORDINATES = paste0(this.TAD),
-                                           CORRELATED_GENE = paste(mcols(this.genes)[c,1]),
+                                           CORRELATED_GENE = paste(mcols(this.genes)[c,"gene_id"]),
                                            CORRELATION = cor[c] ))
       }
     }
     if (length(interactions) > 0) return(makeGRangesFromDataFrame(interactions, keep.extra.columns = T))
   }
+
 }
 
 ##################################################################
@@ -942,7 +951,7 @@ get_units <- function(regions.gr, expr.gr, TAD.gr, IDs, cores, threshold){
   
   # get correlation for each differential region:
   list <- mclapply( seq(length(regions.gr)), 
-                    function(x) get_correlation(x, threshold, regions.gr, TAD.gr, IDs), 
+                    function(x) get_correlation(x, threshold, regions.gr, expr.gr, TAD.gr, IDs), 
                     mc.cores = cores
   )
   units <-  do.call("c", unname(unlist(list)))
