@@ -104,9 +104,9 @@ endPart()
 startPart("Get information of ChIP-seq experiments")
 
 # load info file
-info <- read.csv(file             <- file,
-                 header           <- TRUE,
-                 sep              <- "\t"
+info <- read.csv(file	<- file,
+                 header	<- TRUE,
+                 sep	<- "\t"
 )
 
 # check info file:

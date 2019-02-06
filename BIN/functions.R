@@ -28,7 +28,7 @@ spectrum <- matrix(c( 'norm',           'N', 0, "logical",       "computes norma
                       'cores',          'x', 1, "integer",       "number of cores to use (DEFAULT:1)",
                       'file',           'f', 1, "character",     "summary text file for ChIP-seq experiments",
                       'matrix',         'm', 1, "character",     "normalized data matrix (rds file format)",
-                      'classifier',     'c', 1, "character",     "directory of enhancer classifier",
+                      'classifier',     'c', 1, "character",     "directory of enhancer classifier (DEFAULT: DATA/CLASSIFIER/)",
                       'cutoff',         'u', 1, "double",        "cutoff for probabilities [0,1] (DEFAULT: 0.5)",
                       'distance',       'd', 1, "integer",       "maximum distance (bp) for peak clustering (DEFAULT: 12500)",
                       'genome',         'g', 1, "character",     "genome used in the .bam files ('hg19', 'mm10', 'mm9' or 'hg38')",

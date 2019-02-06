@@ -146,11 +146,14 @@ The only preparation that has to be done is to create a tab delimited info file 
 the location of all ChIP-seq experiments in bam file format.
 All bam files have to be indexed.
 The following histone modifications must be present:\
-'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'
+'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3' (DEFAULT)
+
+or a subset to run a minimal version of the tool:
+'H3K27ac', 'H3K27me3', 'H3K4me1', 'H3K4me3'
 
 The required column names are: 'feature', 'bam_file', 'bam_file_input'
 
-feature         -> lists histone modifications: 'H3K27ac', 'H3K27me3', 'H3K36me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'\
+feature         -> lists histone modifications\
 bam_file        -> location of the alignments in bam format, e.g.: 'TEST/DATA/ChIPseq/condition1.H3K27ac.bam'\
 bam_file_input  -> location of the Input experiments that are associated with each bam_file entry. 
 
@@ -181,7 +184,7 @@ Usage: CRUP.R [-[-prediction|P]] [-[-cores|x] <integer>] [-[-matrix|m] <characte
     -P|--prediction    runs CRUP - EP: (E)nhancer (P)rediction from histone modification
     -x|--cores         number of cores to use (DEFAULT:1)
     -m|--matrix        normalized data matrix (rds file format)
-    -c|--classifier    directory of enhancer classifier
+    -c|--classifier    directory of enhancer classifier (DEFAULT: DATA/CLASSIFIER/)
     -u|--cutoff        cutoff for probabilities [0,1] (DEFAULT: 0.5)
     -d|--distance      maximum distance (bp) for peak clustering (DEFAULT: 12500)
     -o|--outdir        output directory (DEFAULT: same as 'file' directory)
@@ -203,6 +206,10 @@ Output:
 
 > cluster of peak (bedgraph format):\
 'TEST/RESULTS/1_RF_PREDICTIONS/condition1.clusterEnh.bed'
+
+NOTE:
+For a minimal version of the tool using a subset of the histone modifications ('H3K27ac', 'H3K27me3', 'H3K4me1', 'H3K4me3'), specify the classifier directory:
+' -c DATA/CLASSIFIER_MINIMAL/'
 
 
 # Run CRUP - ED 
