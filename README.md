@@ -133,7 +133,7 @@ Usage: CRUP.R [-[-norm|N]] [-[-cores|x] <integer>] [-[-file|f] <character>] [-[-
     -N|--norm          computes normalized count values for .bam files
     -x|--cores         number of cores to use (DEFAULT:1)
     -f|--file          summary text file for ChIP-seq experiments
-    -g|--genome        genome used in the .bam files ('hg19', 'mm10' or 'mm9')
+    -g|--genome        genome used in the .bam files ('hg19', 'mm10', 'mm9' or 'hg38')
     -s|--sequencing    type of sequencing ('paired' or 'single')
     -o|--outdir        output directory (DEFAULT: same as 'file' directory)
     -q|--mapq          minimum mapping quality (DEFAULT:10)
