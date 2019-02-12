@@ -939,7 +939,6 @@ get_correlation <- function(i, threshold, regions.gr, expr.gr, TAD.gr, IDs){
     }
     if (length(interactions) > 0) return(makeGRangesFromDataFrame(interactions, keep.extra.columns = T))
   }
-
 }
 
 ##################################################################

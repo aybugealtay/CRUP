@@ -47,8 +47,8 @@ if (!is.null(opt$RNA) & !is.null(opt$expression)) {
 
 # check genome
 if (!is.null(opt$genome)) { 
-  if (!(opt$genome %in% c("mm10", "hg19"))) { 
-    cat(skip(),"Genome" , opt$genome, " currently not provided. Choose one of: ",paste0(c("mm10","hg19")),"\n\n");
+  if (!(opt$genome %in% genome_values)) { 
+    cat(skip(),"Genome" , opt$genome, " currently not provided. Choose one of: ",paste0(genome_values),"\n\n");
     q();
   }
 }
@@ -153,8 +153,10 @@ pkgLoad("GenomicRanges")  # for GRanges()
 
 if (is.null(opt$expression)) {
   
+  if (genome == "mm9") pkg <- "TxDb.Mmusculus.UCSC.mm9.knownGene"
   if (genome == "mm10") pkg <- "TxDb.Mmusculus.UCSC.mm10.knownGene"
   if (genome == "hg19") pkg <- "TxDb.Hsapiens.UCSC.hg19.knownGene"
+  if (genome == "hg38") pkg <- "TxDb.Hsapiens.UCSC.hg38.knownGene"
 
   pkgLoad(pkg)                  # for genome object
   assign("txdb", eval(parse(text = pkg)))
@@ -204,7 +206,10 @@ if (is.null(opt$expression)) {
 startPart("Correlate condition specific enhancers and genes")
 
 regions.gr <- makeGRangesFromDataFrame(read.table(regions, header = TRUE), keep.extra.columns = T)
-TAD.gr <- makeGRangesFromDataFrame(read.table(TAD, col.names = GR_header_short))
+TAD.df <- read.table(TAD, col.names = GR_header_short)
+TAD.df <- TAD.df[which((TAD.df$end-TAD.df$start) > 0),]
+TAD.gr <- makeGRangesFromDataFrame(TAD.df)
+seqlevels(TAD.gr) = paste0("chr", gsub("chr|Chr","",seqlevels(TAD.gr)))
 
 cat(paste0(skip(), "correlate enhancer probabilities and gene expression counts"))
 units <- get_units(regions.gr, expr.gr, TAD.gr, IDs, cores, threshold_c)

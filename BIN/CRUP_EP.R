@@ -112,7 +112,6 @@ features_all <- unique(c(features1, features2))
 
 # ecdf: will be used for quantile normalization
 ecdf_file <- file.path(dirname(classifier),"ecdf.rds")
-#ecdf_file <- file.path(classifier,"ecdf.rds")
 check_file(ecdf_file)
 ecdf <- readRDS(ecdf_file)
 
